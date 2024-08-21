@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const farmerModel = require("../models/farmer");
+const farmerModel = require("../models/Farmer");
 
 const generateUniquePwd = async () => {
   let id = Math.floor(10000000 + Math.random() * 90000000);
@@ -9,7 +9,7 @@ const generateUniquePwd = async () => {
 
 const generateUniqueID = async () => {
   let id = "F" + Math.floor(10000000 + Math.random() * 90000000);
-  const existingLeave = await employeeModel.findOne({ empID: id });
+  const existingLeave = await farmerModel.findOne({ empID: id });
   if (existingLeave) {
     return generateUniqueID();
   }
@@ -32,17 +32,15 @@ router.post("/addFarmer", async (req, res) => {
 
 router.get("/getAllFarmers", async (req, res) => {
     try {
-        const farmers = await farmerModel.find();
-        console.log('Fetched Farmers:', farmers); // Debug output
-        if (farmers.length === 0) {
-            return res.status(404).json({ message: 'No farmers found' });
-        }
-        res.status(200).json(farmers);
+      const farmers = await farmerModel.find();
+      if (farmers.length === 0) {
+        return res.status(404).json({ message: "No farmers found" });
+      }
+      res.status(200).json(farmers);
     } catch (error) {
-        console.error('Error fetching farmers:', error); // Debug output
-        res.status(500).json({ message: 'Server error' });
-    }
-});
+      res.status(500).json({ message: "Server error", error: error.message });
+    }
+  });
   
 
 router.post("/editEmployee", async (req, res) => {
