@@ -7,6 +7,10 @@ const cors = require("cors");
 const bodyParser = require("body-parser"); 
 const app = express();
 
+app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
+
 const dbconfig = require('./db');
 const farmersRoute = require('./routes/FarmersRoute');
 const employeesRoute = require('./routes/EmplyeesRoute');
@@ -14,10 +18,6 @@ const cropRoute = require('./routes/CropRoute');
 const fertilizerRoute = require('./routes/FertilizerRoute');
 const warehouseRoute = require('./routes/WareHouseRoute');
 const appoinmentRoute = require('./routes/AppointmentRoute');
-
-app.use(express.json());
-app.use(cors());
-app.use(bodyParser.json());
 
 app.use('/api/farmers', farmersRoute);
 app.use('/api/employees', employeesRoute);
