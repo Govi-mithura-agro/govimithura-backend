@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const cropSchema = {
+const cropSchema = new Schema ({
 
-    crop: [],
+    crop: [{
+        type: String,
+        required: true,
+    }],
     cropName: {
         type: String,
         required: true,
@@ -32,8 +35,11 @@ const cropSchema = {
         type: String,
         required: true,
     },
-    region: []
-};
+    region: [{
+        type: String,
+        required: true,
+    }]
+});
 
 const CropData = mongoose.model('cropdetails', cropSchema);
 
