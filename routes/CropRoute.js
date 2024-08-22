@@ -37,4 +37,23 @@ router.route('/addcropdata').post(async(req, res) => {
 
 });
 
+router.route('/getcropdata').post(async(req, res) => {
+
+    try {
+        
+        const crops = await CropData.find();
+
+        if (!crops) {
+            return res.status(404).json({ status: "Crops not found" });
+        }
+
+        return res.status(200).json({status: "Crops are fatched", crops});
+
+    } catch (error) {
+        
+        return res.status(500).json({status: "Error with fetch Crops", message: error});
+
+    }
+});
+
 module.exports = router;
