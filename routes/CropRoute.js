@@ -117,4 +117,21 @@ router.route('/editcrop/:id').put(async (req, res) =>{
     }
 });
 
+router.route('/deletecrop/:id').delete(async (req, res) => {
+
+    const cropId = req.params.id;
+
+    try {
+        
+        await CropData.findByIdAndDelete(cropId);
+        return res.status(200).json({status : "Crop is deleted"});
+
+    } catch (error) {
+        
+        return res.status(400).json({status : "Error with delete crop", message : error});
+
+    }
+});
+
+
 module.exports = router;
