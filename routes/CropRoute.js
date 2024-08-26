@@ -77,4 +77,44 @@ router.route('/getcropdata/:id').post(async(req, res) => {
     }
 });
 
+router.route('/editcrop/:id').put(async (req, res) =>{
+
+    const cropID = req.params.id;
+
+    const {
+        crop,
+        cropName,
+        scientificName,
+        plantingSeason,
+        soilType,
+        growthDuration,
+        averageYield,
+        waterRequirements,
+        region
+    } = req.body;
+
+    const editcrop = {
+        crop,
+        cropName,
+        scientificName,
+        plantingSeason,
+        soilType,
+        growthDuration,
+        averageYield,
+        waterRequirements,
+        region
+    }
+    
+    try {
+        
+        await CropData.findByIdAndUpdate(cropID , editcrop);
+        return res.status(200).json({status: "Crop updated"});
+
+    } catch (error) {
+        
+        return res.status(500).json({status: "Error with update crop", message: error});
+
+    }
+});
+
 module.exports = router;
