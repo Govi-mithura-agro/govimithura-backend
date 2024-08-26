@@ -56,4 +56,25 @@ router.route('/getcropdata').post(async(req, res) => {
     }
 });
 
+router.route('/getcropdata/:id').post(async(req, res) => {
+
+    const cropID = req.params.id;
+
+    try {
+        
+        const crop = await CropData.findById(cropID);
+
+        if (!crop) {
+            return res.status(404).json({ status: "Crop not found" });
+        }
+
+        return res.status(200).json({status: "Crop is fatched", crop});
+
+    } catch (error) {
+        
+        return res.status(500).json({status: "Error with fetch Crop", message: error});
+
+    }
+});
+
 module.exports = router;
