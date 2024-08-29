@@ -2,15 +2,17 @@ const mongoose = require("mongoose");
 
 const fertilizerRequestSchema = new mongoose.Schema(
     {
-        fertilizerId: {
-            type: String,
-            required: true,
-        },
+       
         fertilizerName: { 
             type: String,
             required: true,
         },
-        requestDate: { 
+       requestDate: { 
+           type: String,
+          required: true,
+          },
+
+        wantedDate: { 
             type: String,
             required: true,
         },
