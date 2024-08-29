@@ -4,7 +4,7 @@ const warehouseSchema = new mongoose.Schema(
     {
         warehouseID: {
             type: String,
-           
+             
         },
         warehouseName: {
             type: String,
@@ -12,11 +12,11 @@ const warehouseSchema = new mongoose.Schema(
         },
         district: {
             type: String,
-           
+           required: true,
         },
         province: {
             type: String,
-           
+           required: true,
         },
         phone: {
             type: String,
