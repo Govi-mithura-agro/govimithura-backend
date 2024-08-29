@@ -1,11 +1,10 @@
-require("dotenv").config(); // Ensure this is at the top
-const dotenv = require('dotenv');
-
 const express = require("express");
+const dotenv = require('dotenv');
 const path = require("path");
 const cors = require("cors");
 const bodyParser = require("body-parser"); 
 const app = express();
+require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
