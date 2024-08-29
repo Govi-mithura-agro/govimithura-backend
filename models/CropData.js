@@ -38,7 +38,11 @@ const cropSchema = new Schema ({
     region: [{
         type: String,
         required: true,
-    }]
+    }],
+    description: {
+        type: String,
+        required: true,
+    }
 });
 
 const CropData = mongoose.model('cropdetails', cropSchema);

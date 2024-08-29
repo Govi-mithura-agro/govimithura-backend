@@ -13,7 +13,8 @@ router.route('/addcropdata').post(async(req, res) => {
         growthDuration,
         averageYield,
         waterRequirements,
-        region
+        region,
+        description
     } = req.body;
 
     const newCropData = new CropData({
@@ -25,7 +26,8 @@ router.route('/addcropdata').post(async(req, res) => {
         growthDuration,
         averageYield,
         waterRequirements,
-        region
+        region,
+        description
     });
  
     try {
@@ -90,7 +92,8 @@ router.route('/editcrop/:id').put(async (req, res) =>{
         growthDuration,
         averageYield,
         waterRequirements,
-        region
+        region,
+        description
     } = req.body;
 
     const editcrop = {
@@ -102,7 +105,8 @@ router.route('/editcrop/:id').put(async (req, res) =>{
         growthDuration,
         averageYield,
         waterRequirements,
-        region
+        region,
+        description
     }
     
     try {
