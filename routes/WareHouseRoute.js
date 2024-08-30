@@ -54,30 +54,30 @@ router.route("/getwarehouse/:id").post(async (req, res) => {
     }
   });
   
-  //update warehouse
+ //update warehouse
 router.route("/updatewarehouse/:id").put(async (req, res) => {
-    const warehouseid = req.params.id;
+  const warehouseid = req.params.id;
 
-    const { warehouseID,warehouseName, district, province, phone,capacity } = req.body; 
-  
-    const updatewarehouse = {
-        warehouseID,
-        warehouseName,
-        district,
-        province,
-        phone,
-        capacity
-    };
-  
-    try {
-      await Warehouse.findByIdAndUpdate(warehouseid, updatewarehouse);
-      return res.status(200).json({ status: "Warehouse updated" });
-    } catch (error) {
-      return res
-        .status(400)
-        .json({ status: "Error with update Warehouse", massage: error });
-    }
-  });
+  const { warehouseName, district, province, phone, capacity } = req.body; 
+
+  const updatewarehouse = {
+      warehouseName,
+      district,
+      province,
+      phone,
+      capacity
+  };
+
+  try {
+    await Warehouse.findByIdAndUpdate(warehouseid, updatewarehouse);
+    return res.status(200).json({ status: "Warehouse updated" });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ status: "Error with update Warehouse", message: error.message });
+  }
+});
+
   
   //delete warehouse
 router.route("/delete/:id").delete(async (req, res) => {
