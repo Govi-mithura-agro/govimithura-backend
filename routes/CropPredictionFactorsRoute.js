@@ -99,4 +99,87 @@ router.route('/getcropfactors/:id').post(async(req, res) => {
     }
 });
 
+router.route('/getcropdata/:id').post(async(req, res) => {
+
+    const cropID = req.params.id;
+
+    try {
+        
+        const crop = await CropFactors.findById(cropID);
+
+        if (!crop) {
+            return res.status(404).json({ status: "Crop not found" });
+        }
+
+        return res.status(200).json({status: "Crop is fatched", crop});
+
+    } catch (error) {
+        
+        return res.status(500).json({status: "Error with fetch Crop", message: error});
+
+    }
+});
+
+router.route('/editcropfactor/:id').put(async (req, res) =>{
+
+    const cropFactorID = req.params.id;
+
+    const {
+        province,
+        district,
+        soiltype,
+        soilph,
+        nutrientcontent,
+        temperature,
+        rainfall,
+        humidity,
+        altitude,
+        topography,
+        irrigationsystems,
+        waterquality,
+        varietyselection,
+        growthcycle,
+        pestpressure,
+        diseaseincidence,
+        croprotation,
+        fertilizeruse,
+        demandandpricetrends,
+        supplychainefficiency
+    } = req.body;
+
+    const editcropfactor = {
+        province,
+        district,
+        soiltype,
+        soilph,
+        nutrientcontent,
+        temperature,
+        rainfall,
+        humidity,
+        altitude,
+        topography,
+        irrigationsystems,
+        waterquality,
+        varietyselection,
+        growthcycle,
+        pestpressure,
+        diseaseincidence,
+        croprotation,
+        fertilizeruse,
+        demandandpricetrends,
+        supplychainefficiency
+    }
+    
+    try {
+        
+        await CropFactors.findByIdAndUpdate(cropFactorID , editcropfactor);
+        return res.status(200).json({status: "Crop factor updated"});
+
+    } catch (error) {
+        
+        return res.status(500).json({status: "Error with update crop factor", message: error});
+
+    }
+});
+
 module.exports = router;
