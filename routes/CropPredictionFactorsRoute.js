@@ -182,4 +182,21 @@ router.route('/editcropfactor/:id').put(async (req, res) =>{
     }
 });
 
+router.route('/deletecropfactor/:id').delete(async (req, res) => {
+
+    const cropfactorId = req.params.id;
+
+    try {
+        
+        await CropFactors.findByIdAndDelete(cropfactorId);
+        return res.status(200).json({status : "Crop factor is deleted"});
+
+    } catch (error) {
+        
+        return res.status(400).json({status : "Error with delete crop factor", message : error});
+
+    }
+});
+
+
 module.exports = router;
