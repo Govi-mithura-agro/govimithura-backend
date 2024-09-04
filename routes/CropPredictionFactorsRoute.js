@@ -59,4 +59,23 @@ router.route('/addcropfactors').post(async(req, res) => {
 
 });
 
+router.route('/getcropfactors').post(async(req, res) => {
+
+    try {
+        
+        const cropfactors = await CropFactors.find();
+
+        if (!cropfactors) {
+            return res.status(404).json({ status: "Crops factors not found" });
+        }
+
+        return res.status(200).json({status: "Crops factors are fatched", cropfactors});
+
+    } catch (error) {
+        
+        return res.status(500).json({status: "Error with fetch crops factors", message: error});
+
+    }
+});
+
 module.exports = router;
