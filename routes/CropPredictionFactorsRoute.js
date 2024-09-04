@@ -78,4 +78,25 @@ router.route('/getcropfactors').post(async(req, res) => {
     }
 });
 
+router.route('/getcropfactors/:id').post(async(req, res) => {
+
+    const cropFactorID = req.params.id;
+
+    try {
+        
+        const cropfactor = await CropFactors.findById(cropFactorID);
+
+        if (!cropfactor) {
+            return res.status(404).json({ status: "Crop factor not found" });
+        }
+
+        return res.status(200).json({status: "Crop factor is fatched", cropfactor});
+
+    } catch (error) {
+        
+        return res.status(500).json({status: "Error with fetch crop factor", message: error});
+
+    }
+});
+
 module.exports = router;
