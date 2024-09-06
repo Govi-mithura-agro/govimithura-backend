@@ -78,13 +78,13 @@ router.route('/getcropfactors').post(async(req, res) => {
     }
 });
 
-router.route('/getcropfactors/:id').post(async(req, res) => {
+router.route('/getcropfactors/:district').get(async(req, res) => {
 
-    const cropFactorID = req.params.id;
+    const cropFactorDistrict = req.params.district;
 
     try {
         
-        const cropfactor = await CropFactors.findById(cropFactorID);
+        const cropfactor = await CropFactors.findOne({ district : cropFactorDistrict });
 
         if (!cropfactor) {
             return res.status(404).json({ status: "Crop factor not found" });
@@ -95,27 +95,6 @@ router.route('/getcropfactors/:id').post(async(req, res) => {
     } catch (error) {
         
         return res.status(500).json({status: "Error with fetch crop factor", message: error});
-
-    }
-});
-
-router.route('/getcropdata/:id').post(async(req, res) => {
-
-    const cropID = req.params.id;
-
-    try {
-        
-        const crop = await CropFactors.findById(cropID);
-
-        if (!crop) {
-            return res.status(404).json({ status: "Crop not found" });
-        }
-
-        return res.status(200).json({status: "Crop is fatched", crop});
-
-    } catch (error) {
-        
-        return res.status(500).json({status: "Error with fetch Crop", message: error});
 
     }
 });
