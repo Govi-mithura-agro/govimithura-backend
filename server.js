@@ -12,8 +12,8 @@ app.use(bodyParser.json());
 
 // Sample data for Sri Lankan provinces, districts
 const locations = [
-  { province: "North-Central", district: "Anuradhapura", coordinates: [8.3114, 80.4037] },
-  { province: "North-Central", district: "Polonnaruwa", coordinates: [7.9403, 81.0181] },
+  { province: "North Central", district: "Anuradhapura", coordinates: [8.3114, 80.4037] },
+  { province: "North Central", district: "Polonnaruwa", coordinates: [7.9403, 81.0181] },
   { province: "Southern", district: "Galle", coordinates: [6.0535, 80.2210] },
   { province: "Western", district: "Colombo", coordinates: [6.9271, 79.8612] },
   { province: "Western", district: "Gampaha", coordinates: [7.0915, 79.9999] },
@@ -35,8 +35,8 @@ const locations = [
   { province: "Uva", district: "Monaragala", coordinates: [6.8721, 81.3507] },
   { province: "Sabaragamuwa", district: "Ratnapura", coordinates: [6.6828, 80.3992] },
   { province: "Sabaragamuwa", district: "Kegalle", coordinates: [7.2501, 80.3464] },
-  { province: "North-Western", district: "Kurunegala", coordinates: [7.4869, 80.3659] },
-  { province: "North-Western", district: "Puttalam", coordinates: [8.0362, 79.8570] }
+  { province: "North Western", district: "Kurunegala", coordinates: [7.4869, 80.3659] },
+  { province: "North Western", district: "Puttalam", coordinates: [8.0362, 79.8570] }
 ];
 
 
