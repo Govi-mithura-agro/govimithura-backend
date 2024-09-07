@@ -58,26 +58,24 @@ router.route('/getcropdata').post(async(req, res) => {
     }
 });
 
-router.route('/getcropdata/:id').post(async(req, res) => {
-
-    const cropID = req.params.id;
+router.route('/getcropdata/:province').get(async (req, res) => {
+    const cropProvince = req.params.province;
 
     try {
-        
-        const crop = await CropData.findById(cropID);
+        // Use MongoDB's $in operator to check if the province is in the region array
+        const crop = await CropData.find({ region: { $in: [cropProvince] } });
 
-        if (!crop) {
+        if (!crop || crop.length === 0) {
             return res.status(404).json({ status: "Crop not found" });
         }
 
-        return res.status(200).json({status: "Crop is fatched", crop});
+        return res.status(200).json({ status: "Crop is fetched", crop });
 
     } catch (error) {
-        
-        return res.status(500).json({status: "Error with fetch Crop", message: error});
-
+        return res.status(500).json({ status: "Error with fetch Crop", message: error });
     }
 });
+
 
 router.route('/editcrop/:id').put(async (req, res) =>{
 
