@@ -4,7 +4,7 @@ const fertilizerSchema = new mongoose.Schema(
     {
         warehouseID: {
             type: String,
-            required: true,
+            
         },
         fertilizerName: { 
             type: String,

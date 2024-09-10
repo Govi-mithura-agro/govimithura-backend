@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const RequestFertilizer = require('../models/FertilizersRequest') 
+const Fertilizers = require('../models/Fertilizers')
 
 
 //Request Fertilizer
@@ -90,8 +91,77 @@ router.post("/disapproveFertilizerRequest", async (req, res) => {
 });
 
 
+//add Fertilizer
+router.post("/addFertilizer", async (req, res) => {
+    const { warehouseID, fertilizerName,quantity} = req.body; 
+
+    try {
+        const newFertilizer = new Fertilizers({ 
+            warehouseID,
+            fertilizerName,
+            quantity,
+            
+        });
+
+        const request = await newFertilizer.save(); 
+
+        res.send("Warehouse added Successfully!");
+    } catch (error) {
+        return res.status(400).json({ error });
+    }
+});
 
 
+  //getfertilizer
+  router.route("/getfertilizer/:id").post(async (req, res) => {
+    const fertilizerid = req.params.id;
+  
+    try {
+      const fertilizer = await Fertilizers.findById(fertilizerid);
+      return res.status(200).json({ status: "Fertilizer is fatched", fertilizer });
+    } catch (error) {
+      return res
+        .status(400)
+        .json({ status: "Error with fatch Fertilizer", message: error });
+    }
+  });
+
+ //update fertilizer
+ router.route("/updatefertilizer/:id").put(async (req, res) => {
+    const fertilizerid = req.params.id;
+  
+    const { fertilizerName,quantity } = req.body; 
+  
+    const updatefertilizer = {
+      
+            fertilizerName,
+            quantity,
+    };
+  
+    try {
+      await Fertilizers.findByIdAndUpdate(fertilizerid, updatefertilizer);
+      return res.status(200).json({ status: "Fertilizer updated" });
+    } catch (error) {
+      return res
+        .status(400)
+        .json({ status: "Error with update Fertilizer", message: error.message });
+    }
+  });
+
+
+    //delete fertilizer
+router.route("/delete/:id").delete(async (req, res) => {
+    const fertilizerid = req.params.id;
+  
+    try {
+      await Fertilizers.findByIdAndDelete(fertilizerid);
+      return res.status(200).json({ status: "fertilizer deleted" });
+    } catch (error) {
+      return res
+        .status(400)
+        .json({ status: "Error with delete Fertilizer", massage: error });
+    }
+  });
 
 
 module.exports = router;
