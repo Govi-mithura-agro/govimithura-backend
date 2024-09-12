@@ -54,7 +54,7 @@ app.get("/api/locations", (req, res) => {
 
 const dbconfig = require('./db');
 const farmersRoute = require('./routes/FarmersRoute');
-const employeesRoute = require('./routes/EmplyeesRoute');
+const managerRoute = require('./routes/ManagerRoute.js');
 const cropRoute = require('./routes/CropRoute');
 const fertilizerRoute = require('./routes/FertilizerRoute');
 const warehouseRoute = require('./routes/WareHouseRoute');
@@ -64,7 +64,7 @@ const CropPredictionFactorsRoute = require('./routes/CropPredictionFactorsRoute'
 
 
 app.use('/api/farmers', farmersRoute);
-app.use('/api/employees', employeesRoute);
+app.use('/api/managers', managerRoute);
 app.use('/api/crops', cropRoute);
 app.use('/api/fertilizers', fertilizerRoute);
 app.use('/api/warehouses', warehouseRoute);

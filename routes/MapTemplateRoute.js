@@ -99,13 +99,16 @@ router.put("/updateTemplate/:id", async (req, res) => {
 
 /* this route is used to delete map template */
 router.delete("/deleteMapDetail/:id", async (req, res) => {
+  console.log(`Received request to delete map detail with ID: ${req.params.id}`);
   try {
     await MapTemplateModel.findByIdAndDelete(req.params.id);
     res.send("Map deleted successfully.");
   } catch (error) {
+    console.error("Error while deleting map:", error);
     res.status(500).send("Error while deleting map.");
   }
 });
+
 
 
 /* saving map item location points */
