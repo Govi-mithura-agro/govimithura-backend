@@ -74,4 +74,39 @@ router.route('/getappointments/:email').post(async (req, res) => {
     }
 });
 
+router.route('/editappointment/:id').put(async (req, res) => {
+
+    const appointmentID = req.params.id;
+
+    const {
+        name,
+        email,
+        contact,
+        district,
+        voicemessage,
+        textmessage,
+        file
+    } = req.body;
+
+    const editcrop = {
+        name,
+        email,
+        contact,
+        district,
+        voicemessage,
+        textmessage,
+        file
+    }
+
+    try {
+
+        await Appointment.findByIdAndUpdate(appointmentID, editcrop);
+        return res.status(200).json({ status: "Appointment updated" });
+
+    } catch (error) {
+
+        return res.status(500).json({ status: "Error with update appointment", message: error });
+
+    }
+});
 module.exports = router;
