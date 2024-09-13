@@ -31,8 +31,23 @@ const farmerSchema = new mongoose.Schema(
             required: true,
         },
         address: {
-            type: String,
-            required: true,
+            addressLine: {
+                type: String,
+                required: true
+            },
+
+            province: {
+                type: String,
+                required: true
+            },
+            district: {
+                type: String,
+                required: true
+            },
+            division: {
+                type: String,
+                required: true
+            },
         },
         dob: {
             type: Object,

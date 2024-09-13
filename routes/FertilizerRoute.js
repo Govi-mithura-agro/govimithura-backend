@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const RequestFertilizer = require('../models/FertilizersRequest') 
-const Fertilizers = require('../models/Fertilizers')
+const FertilizerData = require('../models/FertilizerData'); // Adjust the path to your model as necessary
+
 
 
 //Request Fertilizer
@@ -174,6 +175,104 @@ router.get("/getallFertilizers", async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 });
+
+
+
+router.route('/addfertilizer').post(async (req, res) => {
+    const { imageUrl, name, soilType, fertilizerAmount, waterRequirements, crops, description } = req.body;
+
+    const newFertilizer = new FertilizerData({
+        imageUrl,
+        name,
+        soilType,
+        fertilizerAmount,
+        waterRequirements,
+        crops,
+        description
+    });
+
+    try {
+        await newFertilizer.save();
+        return res.status(201).json({ status: "success", message: "Fertilizer details added successfully" });
+    } catch (error) {
+        console.error("Error saving fertilizer:", error); // Log error details
+        return res.status(500).json({ status: "error", message: error.message });
+    }
+});
+
+
+// Route to get all fertilizers
+router.route('/getfertilizers').get(async (req, res) => {
+    try {
+        const fertilizers = await FertilizerData.find();
+        return res.status(200).json({ status: "success", message: "Fertilizers fetched successfully", fertilizers });
+    } catch (error) {
+        return res.status(500).json({ status: "error", message: error.message });
+    }
+});
+
+// Route to get a single fertilizer by ID
+router.route('/getfertilizer/:id').get(async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const fertilizer = await FertilizerData.findById(id);
+        if (!fertilizer) {
+            return res.status(404).json({ status: "error", message: "Fertilizer not found" });
+        }
+        return res.status(200).json({ status: "success", message: "Fertilizer fetched successfully", fertilizer });
+    } catch (error) {
+        return res.status(500).json({ status: "error", message: error.message });
+    }
+});
+
+router.route('/editfertilizer/:id').put(async (req, res) => {
+    const { id } = req.params;
+    const { imageUrl, name, soilType, fertilizerAmount, waterRequirements, crops, description } = req.body;
+
+    console.log("Received update request:", { id, imageUrl, name, soilType, waterRequirements, fertilizerAmount, crops, description });
+
+    const updatedFertilizer = {
+        imageUrl,
+        name,
+        soilType,
+        fertilizerAmount, // Ensure this matches the schema
+        waterRequirements,
+        crops,
+        description
+    };
+
+    try {
+        const result = await FertilizerData.findByIdAndUpdate(id, updatedFertilizer, { new: true });
+        if (!result) {
+            return res.status(404).json({ status: "error", message: "Fertilizer not found" });
+        }
+        return res.status(200).json({ status: "success", message: "Fertilizer updated successfully", result });
+    } catch (error) {
+        console.error("Error updating fertilizer:", error.message);
+        return res.status(500).json({ status: "error", message: error.message });
+    }
+});
+
+  
+
+// Route to delete a fertilizer by ID
+router.delete('/deletefertilizer/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const result = await FertilizerData.findByIdAndDelete(id);
+        if (!result) {
+            return res.status(404).json({ status: "error", message: "Fertilizer not found" });
+        }
+        return res.status(200).json({ status: "success", message: "Fertilizer deleted successfully" });
+    } catch (error) {
+        return res.status(500).json({ status: "error", message: error.message });
+    }
+});
+
+
+
 
 
 module.exports = router;
