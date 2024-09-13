@@ -84,23 +84,32 @@ router.put("/updateTemplate/:id", async (req, res) => {
     const updatedTemplate = await MapTemplateModel.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true }
+      { new: true, runValidators: true }
     );
-    res.send(updatedTemplate);
+    if (!updatedTemplate) {
+      return res.status(404).send("Template not found");
+    }
+    res.json(updatedTemplate);
   } catch (error) {
+    console.error("Error while updating map:", error);
     res.status(500).send("Error while updating map.");
   }
 });
 
+
 /* this route is used to delete map template */
-router.delete("/deleteTemplate/:id", async (req, res) => {
+router.delete("/deleteMapDetail/:id", async (req, res) => {
+  console.log(`Received request to delete map detail with ID: ${req.params.id}`);
   try {
     await MapTemplateModel.findByIdAndDelete(req.params.id);
     res.send("Map deleted successfully.");
   } catch (error) {
+    console.error("Error while deleting map:", error);
     res.status(500).send("Error while deleting map.");
   }
 });
+
+
 
 /* saving map item location points */
 router.post("/saveMapPoints", async (req, res) => {
