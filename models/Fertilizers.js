@@ -14,6 +14,10 @@ const fertilizerSchema = new mongoose.Schema(
             type: Number, 
             required: true,
         },
+        date: { 
+            type: String, 
+            
+        },
     },
     { timestamps: true }
 );
