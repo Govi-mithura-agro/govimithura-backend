@@ -93,13 +93,14 @@ router.post("/disapproveFertilizerRequest", async (req, res) => {
 
 //add Fertilizer
 router.post("/addFertilizer", async (req, res) => {
-    const { warehouseID, fertilizerName,quantity} = req.body; 
+    const { warehouseID, fertilizerName,quantity,date} = req.body; 
 
     try {
         const newFertilizer = new Fertilizers({ 
             warehouseID,
             fertilizerName,
             quantity,
+            date,
             
         });
 
@@ -130,12 +131,13 @@ router.post("/addFertilizer", async (req, res) => {
  router.route("/updatefertilizer/:id").put(async (req, res) => {
     const fertilizerid = req.params.id;
   
-    const { fertilizerName,quantity } = req.body; 
+    const { fertilizerName,quantity,date } = req.body; 
   
     const updatefertilizer = {
       
             fertilizerName,
             quantity,
+            date,
     };
   
     try {
@@ -162,6 +164,16 @@ router.route("/delete/:id").delete(async (req, res) => {
         .json({ status: "Error with delete Fertilizer", massage: error });
     }
   });
+
+  //get all fertilizers
+router.get("/getallFertilizers", async (req, res) => {
+  try {
+    const requests = await Fertilizers.find();
+    return res.json(requests);
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+});
 
 
 module.exports = router;
