@@ -51,6 +51,11 @@ const appointmentSchema = new Schema({
         type: String,
         required: true,
         default: () => new Date().toLocaleTimeString()  // Automatically set the current time
+    },
+    status: {
+        type: String,
+        default: 'Pending',
+        enum: ['Pending', 'Solved', 'Unsolved', 'Rejected', 'Cencelled',]
     }
 });
 
