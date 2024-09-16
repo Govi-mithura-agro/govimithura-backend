@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Appointment = require('../models/Appointment');
 
-// Define your routes here
 router.route('/addappointment').post(async (req, res) => {
 
     const {
@@ -23,16 +22,20 @@ router.route('/addappointment').post(async (req, res) => {
         voicemessage,
         textmessage,
         file
+        // date and time will be set automatically
     });
 
     try {
         await newAppointment.save();
-        return res.status(200).json({ status: "Apppointment are added successfully" });
+        return res.status(200).json({ status: "Appointment added successfully" });
     } catch (error) {
         return res.status(500).json({ status: "Error with adding appointment details", message: error.message });
     }
 
 });
+
+module.exports = router;
+
 
 router.route('/getappointments').post(async (req, res) => {
 
