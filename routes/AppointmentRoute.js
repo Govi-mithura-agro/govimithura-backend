@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Appointment = require('../models/Appointment');
 
-// Define your routes here
 router.route('/addappointment').post(async (req, res) => {
 
     const {
@@ -23,16 +22,20 @@ router.route('/addappointment').post(async (req, res) => {
         voicemessage,
         textmessage,
         file
+        // date and time will be set automatically
     });
 
     try {
         await newAppointment.save();
-        return res.status(200).json({ status: "Apppointment are added successfully" });
+        return res.status(200).json({ status: "Appointment added successfully" });
     } catch (error) {
         return res.status(500).json({ status: "Error with adding appointment details", message: error.message });
     }
 
 });
+
+module.exports = router;
+
 
 router.route('/getappointments').post(async (req, res) => {
 
@@ -125,5 +128,26 @@ router.route('/deleteappointment/:id').delete(async (req, res) => {
 
     }
 });
+
+router.route('/cancelappointment/:id').put(async (req, res) => {
+    const appointmentID = req.params.id;
+
+    try {
+        const updatedAppointment = await Appointment.findByIdAndUpdate(
+            appointmentID, 
+            { status: "Cancelled" }, 
+            { new: true }
+        );
+        
+        if (!updatedAppointment) {
+            return res.status(404).json({ status: "Appointment not found" });
+        }
+        
+        return res.status(200).json({ status: "Appointment cancelled", updatedAppointment });
+    } catch (error) {
+        return res.status(500).json({ status: "Error cancelling appointment", message: error.message });
+    }
+});
+
 
 module.exports = router;
