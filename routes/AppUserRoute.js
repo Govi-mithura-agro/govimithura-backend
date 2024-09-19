@@ -1,7 +1,68 @@
 const express = require('express');
 const router = express.Router();
 const AppUsers = require('../models/AppUsers');
+const crypto = require('crypto');
 
+// In-memory storage for OTPs (replace with a database in production)
+const otpStore = new Map();
+
+// Function to generate OTP
+function generateOTP() {
+    return crypto.randomInt(100000, 999999).toString();
+}
+
+// Route to request OTP
+router.route('/request-otp').post(async (req, res) => {
+    const { contact } = req.body;
+
+    try {
+        const otp = generateOTP();
+        // Store OTP with expiration time (5 minutes)
+        otpStore.set(contact, {
+            otp,
+            expiry: Date.now() + 5 * 60 * 1000
+        });
+
+        // TODO: In production, integrate with SMS service to send OTP
+        console.log(`OTP for ${contact}: ${otp}`);
+
+        // Include the OTP in the response for testing purposes
+        res.status(200).json({ status: "OTP sent successfully", otp: otp });
+    } catch (error) {
+        res.status(500).json({ status: "Error sending OTP", message: error.message });
+    }
+});
+
+
+// Route to verify OTP
+router.route('/verify-otp').post(async (req, res) => {
+    const { contact, otp } = req.body;
+
+    try {
+        const storedOTP = otpStore.get(contact);
+
+        if (!storedOTP) {
+            return res.status(400).json({ status: "OTP not found or expired" });
+        }
+
+        if (Date.now() > storedOTP.expiry) {
+            otpStore.delete(contact);
+            return res.status(400).json({ status: "OTP expired" });
+        }
+
+        if (otp !== storedOTP.otp) {
+            return res.status(400).json({ status: "Invalid OTP" });
+        }
+
+        // OTP is valid
+        otpStore.delete(contact); // Remove used OTP
+        res.status(200).json({ status: "OTP verified successfully" });
+    } catch (error) {
+        res.status(500).json({ status: "Error verifying OTP", message: error.message });
+    }
+});
+
+// Modified registration route
 router.route('/register').post(async (req, res) => {
 
     const {
@@ -21,16 +82,15 @@ router.route('/register').post(async (req, res) => {
     });
 
     try {
-        
+
         await newUser.save();
         return res.status(200).json({status: "User is registered successfully"});
 
     } catch (error) {
-        
+
         return res.status(500).json({status: "Error with register user", messsage: error});
     }
 });
-
 router.route('/login').post(async (req, res) => {
 
     const {
