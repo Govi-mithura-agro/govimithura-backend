@@ -11,10 +11,11 @@ const Fertilizers = require('../models/Fertilizers' ); // Adjust the path to you
 
 //Request Fertilizer
 router.post("/requesrFertilizer", async (req, res) => {
-    const { fertilizerName, requestDate,wantedDate, quantity, description } = req.body; 
+    const { warehouseID,fertilizerName, requestDate,wantedDate, quantity, description } = req.body; 
 
     try {
         const newrequest = new RequestFertilizer({ 
+            warehouseID,
             fertilizerName,
             requestDate,
             wantedDate,
@@ -51,6 +52,16 @@ router.get("/getallFertilizerRequest",async(req,res)=>{
         return res.json(fertilizerRequest);
     } catch (error) {
         return res.status(400).json({massage : error})
+    }
+});
+
+router.post("/getFertilizerRequestedWarehouseId", async (req, res) => {
+    const { warehouseid } = req.body;
+    try {
+        const request = await RequestFertilizer.find({ warehouseID: warehouseid });
+        res.json(request);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
 });
 
@@ -127,6 +138,15 @@ router.post("/addFertilizer", async (req, res) => {
     }
   });
 
+  router.post("/getFertilizerRelaventWarehouseId", async (req, res) => {
+    const { warehouseid } = req.body;
+    try {
+        const request = await Fertilizers.find({ warehouseID: warehouseid });
+        res.json(request);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 
    //getfertilizer for update ware house
    router.route("/getFertilizer/:id").post(async (req, res) => {
