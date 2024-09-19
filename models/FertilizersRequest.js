@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const fertilizerRequestSchema = new mongoose.Schema(
     {
+        warehouseID: { 
+            type: String,
+            required: true,
+        },
        
         fertilizerName: { 
             type: String,
