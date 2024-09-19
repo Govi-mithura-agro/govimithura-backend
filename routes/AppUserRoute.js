@@ -64,5 +64,36 @@ router.route('/login').post(async (req, res) => {
 });
 
 
+router.route('/edituser/:id').put(async (req, res) =>{
+
+    const userId = req.params.id;
+
+    const {
+        name,
+        email,
+        contact,
+        password
+    } = req.body;
+
+    const updateUser = {
+
+        name,
+        email,
+        contact,
+        password
+    }
+    
+    try {
+        
+        await AppUsers.findByIdAndUpdate(userId, updateUser);
+        return res.status(200).json({status: "User updated"});
+
+    } catch (error) {
+        
+        return res.status(500).json({status: "Error with update user", message: error});
+
+    }
+});
+
 
 module.exports = router;
