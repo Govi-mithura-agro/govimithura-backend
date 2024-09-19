@@ -61,6 +61,7 @@ const warehouseRoute = require('./routes/WareHouseRoute');
 const appoinmentRoute = require('./routes/AppointmentRoute');
 const MapTemplateRoute = require('./routes/MapTemplateRoute.js');
 const CropPredictionFactorsRoute = require('./routes/CropPredictionFactorsRoute');
+const AppUserRoute = require('./routes/AppUserRoute');
 
 
 app.use('/api/farmers', farmersRoute);
@@ -71,6 +72,7 @@ app.use('/api/warehouses', warehouseRoute);
 app.use('/api/appoinments', appoinmentRoute);
 app.use('/api/mapTemplate', MapTemplateRoute);
 app.use('/api/cropfactors', CropPredictionFactorsRoute);
+app.use('/api/appuser', AppUserRoute);
 
 
 
