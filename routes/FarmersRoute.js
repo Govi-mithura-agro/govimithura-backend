@@ -14,15 +14,17 @@ const generateUniqueID = async () => {
 router.post("/addFarmer", async (req, res) => {
   const farmerData = req.body;
   try {
-    const farID = await generateUniqueID();
+    const farID = await generateUniqueID(); // Ensure this function is working as expected
     farmerData.farmerID = farID;
     const newFarmer = new farmerModel(farmerData);
     await newFarmer.save();
     res.status(201).send("Farmer added successfully");
   } catch (error) {
+    console.error("Error while adding farmer:", error); // Add console log for debugging
     res.status(400).json({ message: error.message });
   }
 });
+
 
 router.get("/getAllFarmers", async (req, res) => {
   try {
@@ -35,6 +37,27 @@ router.get("/getAllFarmers", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+
+// Get farmers by district
+router.get("/getAllFarmersByDistrict", async (req, res) => {
+  try {
+    const { district } = req.query; // retrieve district from query parameters
+    if (!district) {
+      return res.status(400).json({ message: "District not provided" });
+    }
+    
+    const farmers = await farmerModel.find({ 'address.district': district });
+    if (farmers.length === 0) {
+      return res.status(404).json({ message: "No farmers found in this district" });
+    }
+    
+    res.status(200).json(farmers);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+
 
 router.post("/editFarmer", async (req, res) => {
   const farmerData = req.body;

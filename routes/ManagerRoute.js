@@ -58,11 +58,12 @@ router.get('/managersbyid/:id', async (req, res) => {
 });
 
 // UPDATE a specific manager by ID
+// UPDATE a specific manager by ID
 router.post('/updatemanager/:id', async (req, res) => {
   try {
-    const { name, email, password, departmentId, phoneNumber, address } = req.body;
+    const { name, email, password, departmentId, phoneNumber, address, role, status } = req.body;
 
-    // Find the manager by ID and update
+    // Find the manager by ID
     const manager = await Manager.findById(req.params.id);
     if (!manager) {
       return res.status(404).json({ message: 'Manager not found' });
@@ -74,6 +75,8 @@ router.post('/updatemanager/:id', async (req, res) => {
     manager.departmentId = departmentId || manager.departmentId;
     manager.phoneNumber = phoneNumber || manager.phoneNumber;
     manager.address = address || manager.address;
+    manager.role = role || manager.role;
+    manager.status = status || manager.status;
 
     // Update password if provided
     if (password) {
@@ -86,6 +89,29 @@ router.post('/updatemanager/:id', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
+
+
+// TOGGLE manager status (active/suspended)
+router.post('/togglemanagerstatus/:id', async (req, res) => {
+  try {
+    const manager = await Manager.findById(req.params.id);
+    if (!manager) {
+      return res.status(404).json({ message: 'Manager not found' });
+    }
+
+    // Toggle the status between 'active' and 'suspended'
+    manager.status = manager.status === 'active' ? 'suspended' : 'active';
+
+    await manager.save();
+    res.status(200).json({ message: `Manager ${manager.status === 'active' ? 'activated' : 'suspended'} successfully`, status: manager.status });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
 
 // DELETE a specific manager by ID
 router.delete('/deletemanager/:id', async (req, res) => {
