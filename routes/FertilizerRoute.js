@@ -32,28 +32,16 @@ router.post("/requesrFertilizer", async (req, res) => {
 });
 
 
-//get all leaves
-router.get("/getallFertilizerRequest", async (req, res) => {
+
+  router.get("/getallFertilizerRequest", async (req, res) => {
     try {
-      const requests = await RequestFertilizer.find();
-      return res.json(requests);
+        const requests = await RequestFertilizer.find().populate('warehouseID', 'district province'); // Assuming warehouseID is a reference to Warehouse
+        return res.json(requests);
     } catch (error) {
-      return res.status(400).json({ message: error.message });
-    }
-  });
-  
-
-
-//get all fertilizerRequest
-router.get("/getallFertilizerRequest",async(req,res)=>{
-
-    try {
-        const fertilizerRequest = await RequestFertilizer.find()
-        return res.json(fertilizerRequest);
-    } catch (error) {
-        return res.status(400).json({massage : error})
+        return res.status(400).json({ message: error.message });
     }
 });
+
 
 router.post("/getFertilizerRequestedWarehouseId", async (req, res) => {
     const { warehouseid } = req.body;
