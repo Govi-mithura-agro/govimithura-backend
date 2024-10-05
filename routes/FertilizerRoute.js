@@ -97,24 +97,28 @@ router.post("/disapproveFertilizerRequest", async (req, res) => {
 
 //add Fertilizer fore ware house
 router.post("/addFertilizer", async (req, res) => {
-    const { warehouseID, fertilizerName,quantity,date} = req.body; 
+    const { warehouseID, imageUrl, name, soilType, fertilizerAmount, waterRequirements, crops, description } = req.body; 
 
     try {
-        const newFertilizer = new Fertilizers({ 
-            warehouseID,
-            fertilizerName,
-            quantity,
-            date,
-            
+        const newFertilizer = new FertilizerData({ 
+            imageUrl,
+            name,
+            soilType,
+            fertilizerAmount,
+            waterRequirements,
+            crops,
+            description,
+            warehouseID // If you want to keep warehouseID as part of the data
         });
 
-        const request = await newFertilizer.save(); 
-
-        res.send("Warehouse added Successfully!");
+        await newFertilizer.save(); 
+        res.send("Fertilizer added Successfully!");
     } catch (error) {
+        console.error("Error adding fertilizer:", error); // Log the error for debugging
         return res.status(400).json({ error });
     }
 });
+
 
   //get all fertilizers for ware house
   router.get("/getallFertilizers", async (req, res) => {

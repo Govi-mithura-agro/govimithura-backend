@@ -54,6 +54,25 @@ router.get("/getAllMapDetails", async (req, res) => {
   }
 });
 
+// GET route to fetch a specific map detail by ID
+router.get('/getMapDetails/:id', async (req, res) => {
+  try {
+    const mapId = req.params.id;
+    
+    // Find the map detail by ID
+    const mapDetail = await MapTemplateModel.findById(mapId);
+    
+    if (!mapDetail) {
+      return res.status(404).json({ message: 'Map detail not found' });
+    }
+    
+    res.json(mapDetail);
+  } catch (error) {
+    console.error('Error fetching map detail:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 /* this route is used to get one map template */
 router.get("/getOneTemplate/:templateName", async (req, res) => {
   try {
@@ -64,19 +83,6 @@ router.get("/getOneTemplate/:templateName", async (req, res) => {
   }
 });
 
-/* this route is used to calculate area and perimeter */
-const calculateArea = (locationPoints) => {
-  const coordinates = locationPoints.map((point) => [
-    point.longitude,
-    point.latitude,
-  ]);
-  coordinates.push(coordinates[0]);
-
-  const polygon = turf.polygon([coordinates]);
-  const areaInSquareMeters = turf.area(polygon);
-  const areaInPerches = parseFloat((areaInSquareMeters * 0.0395369).toFixed(4));
-  return areaInPerches;
-};
 
 /* this route is used to update map template */
 router.put("/updateTemplate/:id", async (req, res) => {
@@ -87,12 +93,12 @@ router.put("/updateTemplate/:id", async (req, res) => {
       { new: true, runValidators: true }
     );
     if (!updatedTemplate) {
-      return res.status(404).send("Template not found");
+      return res.status(404).json({ message: "Template not found" });
     }
     res.json(updatedTemplate);
   } catch (error) {
     console.error("Error while updating map:", error);
-    res.status(500).send("Error while updating map.");
+    res.status(500).json({ message: "Error while updating map.", error: error.message });
   }
 });
 
