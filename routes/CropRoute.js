@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const CropData = require('../models/CropData');
 
-router.route('/addcropdata').post(async(req, res) => {
-
+router.route('/addcropdata').post(async (req, res) => {
     const {
         crop,
         cropName,
@@ -17,26 +16,35 @@ router.route('/addcropdata').post(async(req, res) => {
         description
     } = req.body;
 
-    const newCropData = new CropData({
-        crop,
-        cropName,
-        scientificName,
-        plantingSeason,
-        soilType,
-        growthDuration,
-        averageYield,
-        waterRequirements,
-        region,
-        description
-    });
- 
     try {
-        await newCropData.save();
-        return res.status(200).json({status: "Crop details are added successfully"});
-    } catch (error) {
-        return res.status(500).json({status: "Error with adding crop details", message: error.message});
-    }  
+        // Check if a crop with the same scientific name already exists
+        const existingCrop = await CropData.findOne({ scientificName: scientificName });
+        if (existingCrop) {
+            return res.status(400).json({
+                status: "Error",
+                message: "A crop with this scientific name already exists in the database."
+            });
+        }
 
+        // If no existing crop found, proceed with creating a new one
+        const newCropData = new CropData({
+            crop,
+            cropName,
+            scientificName,
+            plantingSeason,
+            soilType,
+            growthDuration,
+            averageYield,
+            waterRequirements,
+            region,
+            description
+        });
+
+        await newCropData.save();
+        return res.status(200).json({ status: "Crop details are added successfully" });
+    } catch (error) {
+        return res.status(500).json({ status: "Error with adding crop details", message: error.message });
+    }
 });
 
 router.route('/getcropdata').post(async(req, res) => {
@@ -77,8 +85,7 @@ router.route('/getcropdata/:province').get(async (req, res) => {
 });
 
 
-router.route('/editcrop/:id').put(async (req, res) =>{
-
+router.route('/editcrop/:id').put(async (req, res) => {
     const cropID = req.params.id;
 
     const {
@@ -106,16 +113,26 @@ router.route('/editcrop/:id').put(async (req, res) =>{
         region,
         description
     }
-    
+
     try {
-        
-        await CropData.findByIdAndUpdate(cropID , editcrop);
-        return res.status(200).json({status: "Crop updated"});
+        // Check if another crop with the same scientific name already exists
+        const existingCrop = await CropData.findOne({
+            scientificName: scientificName,
+            _id: { $ne: cropID } // Exclude the current crop from the search
+        });
 
+        if (existingCrop) {
+            return res.status(400).json({
+                status: "Error",
+                message: "Another crop with this scientific name already exists in the database."
+            });
+        }
+
+        // If no existing crop found with the same scientific name, proceed with the update
+        await CropData.findByIdAndUpdate(cropID, editcrop);
+        return res.status(200).json({ status: "Crop updated successfully" });
     } catch (error) {
-        
-        return res.status(500).json({status: "Error with update crop", message: error});
-
+        return res.status(500).json({ status: "Error with update crop", message: error.message });
     }
 });
 
