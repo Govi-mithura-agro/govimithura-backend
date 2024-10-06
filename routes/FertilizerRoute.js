@@ -97,7 +97,7 @@ router.post("/disapproveFertilizerRequest", async (req, res) => {
 
 //add Fertilizer fore ware house
 router.post("/addFertilizer", async (req, res) => {
-    const { warehouseID, imageUrl, name, soilType, fertilizerAmount, waterRequirements, crops, description } = req.body; 
+    const {  imageUrl, name, soilType, fertilizerAmount, waterRequirements, crops, description } = req.body; 
 
     try {
         const newFertilizer = new FertilizerData({ 
@@ -108,7 +108,7 @@ router.post("/addFertilizer", async (req, res) => {
             waterRequirements,
             crops,
             description,
-            warehouseID // If you want to keep warehouseID as part of the data
+             // If you want to keep warehouseID as part of the data
         });
 
         await newFertilizer.save(); 
@@ -197,25 +197,24 @@ router.route("/delete/:id").delete(async (req, res) => {
 
 
 
-router.route('/addfertilizer').post(async (req, res) => {
-    const { imageUrl, name, soilType, fertilizerAmount, waterRequirements, crops, description } = req.body;
-
-    const newFertilizer = new FertilizerData({
-        imageUrl,
-        name,
-        soilType,
-        fertilizerAmount,
-        waterRequirements,
-        crops,
-        description
-    });
+//add Fertilizer fore ware house
+router.post("/addFertilizers", async (req, res) => {
+    const { warehouseID, fertilizerName, quantity, date } = req.body;
 
     try {
-        await newFertilizer.save();
-        return res.status(201).json({ status: "success", message: "Fertilizer details added successfully" });
+        const newFertilizer = new Fertilizers({
+            warehouseID,
+            fertilizerName,
+            quantity,
+            date,
+
+        });
+
+        const request = await newFertilizer.save();
+
+        res.send("Warehouse added Successfully!");
     } catch (error) {
-        console.error("Error saving fertilizer:", error); // Log error details
-        return res.status(500).json({ status: "error", message: error.message });
+        return res.status(400).json({ error });
     }
 });
 
